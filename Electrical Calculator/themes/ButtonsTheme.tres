@@ -1,0 +1,38 @@
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://bu42yi3aglkrt"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sant7"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2idwp"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jgkvn"]
+bg_color = Color(0.6, 0.6, 0.6, 0.239216)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uauom"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[resource]
+Button/font_sizes/font_size = 20
+Button/styles/disabled = SubResource("StyleBoxFlat_sant7")
+Button/styles/focus = SubResource("StyleBoxFlat_2idwp")
+Button/styles/hover = SubResource("StyleBoxFlat_jgkvn")
+Button/styles/normal = SubResource("StyleBoxFlat_sant7")
+Button/styles/pressed = SubResource("StyleBoxFlat_uauom")
+Label/font_sizes/font_size = 30
