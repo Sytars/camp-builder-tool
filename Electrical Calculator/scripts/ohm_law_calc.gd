@@ -21,6 +21,8 @@ func _ready():
 
 
 func _process(delta):
+	if not visible:
+		return
 	if Input.is_action_pressed("reset"):
 		reset_values()
 	elif Input.is_action_pressed("enter"):

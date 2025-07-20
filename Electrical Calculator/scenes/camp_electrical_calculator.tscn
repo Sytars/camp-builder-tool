@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://dm2e3fxypc2yn"]
 
-[ext_resource type="Script" path="res://scenes/camp_electrical_calculator.gd" id="1_7ebfa"]
+[ext_resource type="Script" path="res://scripts/camp_electrical_calculator.gd" id="1_7ebfa"]
 [ext_resource type="Theme" uid="uid://bu42yi3aglkrt" path="res://themes/ButtonsTheme.tres" id="1_yxefw"]
 [ext_resource type="Theme" uid="uid://ddtvrpt7sq64w" path="res://themes/LabelTheme.tres" id="2_n3nog"]
 

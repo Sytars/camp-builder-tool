@@ -1,10 +1,42 @@
-[gd_scene load_steps=10 format=3 uid="uid://dre6exytsi6lh"]
+[gd_scene load_steps=13 format=3 uid="uid://dre6exytsi6lh"]
 
-[ext_resource type="Script" path="res://scenes/camp_layout.gd" id="1_cunqu"]
+[ext_resource type="Script" path="res://scripts/camp_layout.gd" id="1_cunqu"]
 [ext_resource type="Theme" uid="uid://bu42yi3aglkrt" path="res://themes/ButtonsTheme.tres" id="2_64cpe"]
 [ext_resource type="Theme" uid="uid://ddtvrpt7sq64w" path="res://themes/LabelTheme.tres" id="2_xk5n3"]
-[ext_resource type="Script" path="res://scenes/Tent_container.gd" id="5_ke2x3"]
+[ext_resource type="Script" path="res://scripts/layout_axis.gd" id="5_f4oxh"]
 [ext_resource type="Theme" uid="uid://e8giahels7t2" path="res://themes/LineEditTheme.tres" id="5_yvwgc"]
+[ext_resource type="Theme" uid="uid://iarl68iasewd" path="res://themes/Tents.tres" id="6_lrp73"]
+[ext_resource type="Script" path="res://scripts/Tents.gd" id="6_lxgp7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g4lpw"]
+bg_color = Color(0.6, 0.6, 0.6, 0.0470588)
+
+[sub_resource type="Animation" id="Animation_v0to0"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel:size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(300, 1080)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel/Ribbon:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
 
 [sub_resource type="Animation" id="Animation_hlamf"]
 resource_name = "collapse"
@@ -32,33 +64,6 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
-}
-
-[sub_resource type="Animation" id="Animation_v0to0"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Panel:size")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(300, 1080)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Panel/Ribbon:visible")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
 }
 
 [sub_resource type="Animation" id="Animation_3viq0"]
@@ -110,9 +115,9 @@ layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 300.0
-offset_bottom = 1080.0
 grow_vertical = 2
 theme = ExtResource("2_xk5n3")
+theme_override_styles/panel = SubResource("StyleBoxFlat_g4lpw")
 
 [node name="Ribbon" type="VBoxContainer" parent="Panel"]
 layout_mode = 1
@@ -126,20 +131,22 @@ theme_override_constants/separation = 20
 [node name="Snapping accuracy" type="VBoxContainer" parent="Panel/Ribbon"]
 layout_mode = 2
 
+[node name="snap_label" type="Label" parent="Panel/Ribbon/Snapping accuracy"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel/Ribbon/Snapping accuracy"]
 layout_mode = 2
 
-[node name="snap_label" type="Label" parent="Panel/Ribbon/Snapping accuracy/HBoxContainer"]
+[node name="snap_slider" type="HSlider" parent="Panel/Ribbon/Snapping accuracy/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
-theme_override_font_sizes/font_size = 20
+size_flags_horizontal = 4
 
 [node name="snap_edit" type="LineEdit" parent="Panel/Ribbon/Snapping accuracy/HBoxContainer"]
 layout_mode = 2
 theme = ExtResource("5_yvwgc")
 text = "test"
-
-[node name="snap_slider" type="HSlider" parent="Panel/Ribbon/Snapping accuracy"]
-layout_mode = 2
 
 [node name="New Tent" type="VBoxContainer" parent="Panel/Ribbon"]
 layout_mode = 2
@@ -153,6 +160,19 @@ alignment = 0
 
 [node name="Tent Selection Ribbon" type="VBoxContainer" parent="Panel/Ribbon/New Tent"]
 layout_mode = 2
+
+[node name="num_sections_label" type="Label" parent="Panel/Ribbon/New Tent/Tent Selection Ribbon"]
+layout_mode = 2
+theme = ExtResource("2_xk5n3")
+text = "Sections: 4"
+
+[node name="num_sections_slider" type="HSlider" parent="Panel/Ribbon/New Tent/Tent Selection Ribbon"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+min_value = 1.0
+max_value = 4.0
+value = 1.0
 
 [node name="Mod_button" type="Button" parent="Panel/Ribbon/New Tent/Tent Selection Ribbon"]
 layout_mode = 2
@@ -168,6 +188,13 @@ theme = ExtResource("2_64cpe")
 text = "HQSS"
 alignment = 0
 
+[node name="Axis_button" type="Button" parent="Panel/Ribbon"]
+layout_mode = 2
+theme = ExtResource("2_64cpe")
+theme_override_font_sizes/font_size = 30
+text = "Enable Axis"
+alignment = 0
+
 [node name="collapse_animations" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_84861")
@@ -177,17 +204,37 @@ libraries = {
 wait_time = 0.1
 one_shot = true
 
+[node name="axis" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("5_f4oxh")
+
 [node name="Tents" type="Control" parent="."]
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("5_ke2x3")
+script = ExtResource("6_lxgp7")
+
+[node name="justfortenttheme" type="Button" parent="."]
+visible = false
+custom_minimum_size = Vector2(111.735, 90.435)
+layout_mode = 0
+offset_left = 624.0
+offset_top = 319.0
+offset_right = 735.735
+offset_bottom = 409.435
+theme = ExtResource("6_lrp73")
+text = "HQSS
+Sec: 3
+Power"
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="mouse_entered" from="Panel" to="." method="_on_panel_mouse_entered"]
+[connection signal="value_changed" from="Panel/Ribbon/Snapping accuracy/HBoxContainer/snap_slider" to="." method="_on_h_slider_value_changed"]
 [connection signal="focus_entered" from="Panel/Ribbon/Snapping accuracy/HBoxContainer/snap_edit" to="." method="_on_snap_edit_focus_entered"]
-[connection signal="value_changed" from="Panel/Ribbon/Snapping accuracy/snap_slider" to="." method="_on_h_slider_value_changed"]
 [connection signal="pressed" from="Panel/Ribbon/New Tent/new_tent_button" to="." method="_on_new_tent_button_pressed"]
+[connection signal="value_changed" from="Panel/Ribbon/New Tent/Tent Selection Ribbon/num_sections_slider" to="." method="_on_num_sections_slider_value_changed"]
 [connection signal="pressed" from="Panel/Ribbon/New Tent/Tent Selection Ribbon/Mod_button" to="." method="_on_mod_button_pressed"]
 [connection signal="pressed" from="Panel/Ribbon/New Tent/Tent Selection Ribbon/Hqss_button" to="." method="_on_hqss_button_pressed"]
 [connection signal="animation_finished" from="collapse_animations" to="." method="_on_collapse_animations_animation_finished"]
