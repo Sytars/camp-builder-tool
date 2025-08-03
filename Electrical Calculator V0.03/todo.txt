@@ -1,0 +1,5 @@
+1: find a way to tell what button is pressed to camp cad
+2: [DONE] add axis line for alignment
+3: move some functions andd their variables to another script
+4: [DONE] make the selector green select all thats touching, and blue all thats fully in selection
+5: on instantiation, rename object labels with its values

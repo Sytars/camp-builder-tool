@@ -1,0 +1,21 @@
+func old_initialise_objects_containers(object_template: Dictionary) -> void:
+	# Adding
+	#	-New control node for each category as child of objects_container
+	#	-New dictionnary per category created inside all_objects_data
+	for category in object_template:
+		var new_container: Control = Control.new()
+		new_container.name = category
+		objects_container.add_child(new_container)
+		all_objects_data[category] = {}
+	
+	# Adding
+	#	-New control node for each type as child of objects_container's correct category
+	#	-New dictionnary per type created inside all_objects_data's correct category
+	for category in object_template:
+		for type in object_template[category]:
+			var new_container: Control = Control.new()
+			new_container.name = type
+			for child in objects_container.get_children():
+				if category == child.name:
+					child.add_child(new_container)
+			all_objects_data[category][type] = {}

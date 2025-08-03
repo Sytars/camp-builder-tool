@@ -1,0 +1,98 @@
+extends Control
+
+
+@onready var collapse_ribbon = $Panel/Ribbon/Collapse_Ribbon
+@onready var panel = $Panel
+@onready var collapse_animations = $collapse_animations
+@onready var arrow = $Panel/Ribbon/Collapse_Ribbon/Arrow
+@onready var snap_edit = $"Panel/Ribbon/Snapping accuracy/HBoxContainer/snap_edit"
+@onready var snap_label = $"Panel/Ribbon/Snapping accuracy/HBoxContainer/snap_label"
+
+@onready var snap_slider = $"Panel/Ribbon/Snapping accuracy/snap_slider"
+
+
+@export var snap_size: float = 64.0
+var collapsed = true
+
+func _ready():
+	snap_slider.value = snap_size
+	snap_label.text = "Snap precision: "
+	snap_edit.text = str(snap_slider.value)
+	arrow.flip_h = true
+	panel.size.x = 50
+	collapsed = true
+
+
+func _input(event):
+	if not visible:
+		return
+
+	if Input.is_action_just_pressed("enter"):
+		snap_edit.release_focus()
+		if not snap_edit.text.is_valid_float():
+			return
+		snap_size = float(snap_edit.text)
+		snap_slider.value = snap_size
+	
+	if not collapsed:
+		return
+		
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			# If a click reaches here, it means it was not handled by any UI element.
+			# So it must be a click on the canvas behind the UI.
+			var unsnapped_pos = get_click_pos_relative_to_node(event)
+			if unsnapped_pos != null:
+				print("Unsnapped Position: ", unsnapped_pos)
+				var snapped_pos = snap_vector2(unsnapped_pos, snap_size, size)
+				print("Snapped Position (for depositing): ", snapped_pos)
+
+
+
+func get_click_pos_relative_to_node(event):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			var mouse_global_pos = get_global_mouse_position()
+			var node_global_pos = get_global_transform().origin
+			var mouse_pos_relative_to_node = mouse_global_pos - node_global_pos
+			if mouse_pos_relative_to_node.x < 0 or mouse_pos_relative_to_node.y < 0:
+				return null
+			if mouse_pos_relative_to_node.x > size.x or mouse_pos_relative_to_node.y > size.y:
+				return null
+			return mouse_pos_relative_to_node
+	return null
+
+func snap_vector2(position_to_snap: Vector2, snap_s: float, bounds_size: Vector2) -> Vector2:
+	if snap_s <= 0: # Avoid division by zero or snapping with zero/negative size
+		return position_to_snap
+	var snapped_x = round(position_to_snap.x / snap_s) * snap_s
+	var snapped_y = round(position_to_snap.y / snap_s) * snap_s
+	snapped_x = max(0.0, snapped_x)
+	snapped_y = max(0.0, snapped_y)
+	# Ensure snapped position doesn't exceed the last valid snap point within bounds_size
+	var max_snapped_x = bounds_size.x - fmod(bounds_size.x, snap_s) if bounds_size.x > 0 else 0.0
+	var max_snapped_y = bounds_size.y - fmod(bounds_size.y, snap_s) if bounds_size.y > 0 else 0.0
+	snapped_x = min(max_snapped_x, snapped_x)
+	snapped_y = min(max_snapped_y, snapped_y)
+	return Vector2(snapped_x, snapped_y)
+
+func switch_collapse():
+	if collapsed:
+		collapse_animations.play("expand")
+		collapsed = false
+		arrow.flip_h = false
+	else:
+		collapse_animations.play("collapse")
+		collapsed = true
+		arrow.flip_h = true
+
+func _on_collapse_ribbon_pressed():
+	switch_collapse()
+
+func _on_h_slider_value_changed(value):
+	snap_edit.text = str(value)
+	snap_size = float(value)
+
+
+func _on_snap_edit_focus_entered():
+	snap_edit.select()
