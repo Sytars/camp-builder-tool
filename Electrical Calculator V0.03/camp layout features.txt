@@ -1,8 +1,1 @@
-have a ribbon for commands up top
-add an object
-	if object is tent, and tent is hqss or mod, multiply y by number of sections
-number of section slider
-objects need to snap
-add axis lines to cursor, toggle with "x"
-selection capability
-no overlapping shit
+
