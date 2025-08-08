@@ -1,0 +1,109 @@
+[gd_scene load_steps=6 format=3 uid="uid://li1usm2eankn"]
+
+[ext_resource type="Theme" uid="uid://bu42yi3aglkrt" path="res://themes/ButtonsTheme.tres" id="1_4vsbn"]
+[ext_resource type="Script" uid="uid://12hs6x7oa4r3" path="res://scripts/settings.gd" id="1_13a5r"]
+[ext_resource type="Script" uid="uid://dhorrvok7on3w" path="res://scripts/Resolutions.gd" id="2_vlymb"]
+[ext_resource type="Script" uid="uid://biuokwficcijn" path="res://scripts/BG Color.gd" id="4_c5n1c"]
+[ext_resource type="Theme" uid="uid://ddtvrpt7sq64w" path="res://themes/LabelTheme.tres" id="5_vgaq8"]
+
+[node name="Settings" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_13a5r")
+
+[node name="Options_OptionsWindow" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Options" type="VBoxContainer" parent="Options_OptionsWindow"]
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Resolution" type="Button" parent="Options_OptionsWindow/Options"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_vertical = 4
+theme = ExtResource("1_4vsbn")
+text = "Resolution"
+
+[node name="Theme_Color" type="Button" parent="Options_OptionsWindow/Options"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme = ExtResource("1_4vsbn")
+text = "Theme Color"
+
+[node name="MarginContainer" type="MarginContainer" parent="Options_OptionsWindow"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Resolutions" type="VBoxContainer" parent="Options_OptionsWindow/MarginContainer"]
+layout_mode = 2
+alignment = 1
+script = ExtResource("2_vlymb")
+
+[node name="BG Color" type="VBoxContainer" parent="Options_OptionsWindow/MarginContainer"]
+layout_mode = 2
+alignment = 1
+script = ExtResource("4_c5n1c")
+
+[node name="Theme Color Label" type="Label" parent="Options_OptionsWindow/MarginContainer/BG Color"]
+layout_mode = 2
+theme = ExtResource("5_vgaq8")
+theme_override_font_sizes/font_size = 20
+text = "Theme Color"
+horizontal_alignment = 1
+
+[node name="R Label" type="Label" parent="Options_OptionsWindow/MarginContainer/BG Color"]
+layout_mode = 2
+theme = ExtResource("5_vgaq8")
+text = "test"
+horizontal_alignment = 1
+
+[node name="R Slider" type="HSlider" parent="Options_OptionsWindow/MarginContainer/BG Color"]
+custom_minimum_size = Vector2(360, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 1
+max_value = 255.0
+
+[node name="G Label" type="Label" parent="Options_OptionsWindow/MarginContainer/BG Color"]
+layout_mode = 2
+theme = ExtResource("5_vgaq8")
+text = "test"
+horizontal_alignment = 1
+
+[node name="G Slider" type="HSlider" parent="Options_OptionsWindow/MarginContainer/BG Color"]
+custom_minimum_size = Vector2(360, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 1
+max_value = 255.0
+
+[node name="B Label" type="Label" parent="Options_OptionsWindow/MarginContainer/BG Color"]
+layout_mode = 2
+theme = ExtResource("5_vgaq8")
+text = "test"
+horizontal_alignment = 1
+
+[node name="B Slider" type="HSlider" parent="Options_OptionsWindow/MarginContainer/BG Color"]
+custom_minimum_size = Vector2(360, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 1
+max_value = 255.0
+
+[connection signal="pressed" from="Options_OptionsWindow/Options/Resolution" to="." method="_on_resolution_pressed"]
+[connection signal="pressed" from="Options_OptionsWindow/Options/Resolution" to="Options_OptionsWindow/MarginContainer/Resolutions" method="_on_resolution_pressed"]
+[connection signal="pressed" from="Options_OptionsWindow/Options/Theme_Color" to="." method="_on_theme_color_pressed"]
+[connection signal="value_changed" from="Options_OptionsWindow/MarginContainer/BG Color/R Slider" to="Options_OptionsWindow/MarginContainer/BG Color" method="_on_r_slider_value_changed"]
+[connection signal="value_changed" from="Options_OptionsWindow/MarginContainer/BG Color/G Slider" to="Options_OptionsWindow/MarginContainer/BG Color" method="_on_g_slider_value_changed"]
+[connection signal="value_changed" from="Options_OptionsWindow/MarginContainer/BG Color/B Slider" to="Options_OptionsWindow/MarginContainer/BG Color" method="_on_b_slider_value_changed"]

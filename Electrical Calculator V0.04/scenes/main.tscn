@@ -1,0 +1,324 @@
+[gd_scene load_steps=17 format=3 uid="uid://jr0utgss3wkj"]
+
+[ext_resource type="Theme" uid="uid://bu42yi3aglkrt" path="res://themes/ButtonsTheme.tres" id="1_v7y7w"]
+[ext_resource type="Script" uid="uid://b6tw2uhx10t78" path="res://scripts/main.gd" id="1_wjr1m"]
+[ext_resource type="Theme" uid="uid://8xl1vqs4t5v1" path="res://themes/panel.tres" id="2_k7nbf"]
+[ext_resource type="Script" uid="uid://c857wljvgmakc" path="res://scripts/Panel.gd" id="2_tqy51"]
+[ext_resource type="PackedScene" uid="uid://cmx3b4dghyhi3" path="res://scenes/pythagore.tscn" id="6_c1e7a"]
+[ext_resource type="PackedScene" uid="uid://brqo40txkrn4i" path="res://scenes/ohm_law_calc.tscn" id="6_icv3g"]
+[ext_resource type="PackedScene" uid="uid://cno8vc7cinrsi" path="res://scenes/test_1.tscn" id="7_diktt"]
+[ext_resource type="PackedScene" uid="uid://dm2e3fxypc2yn" path="res://scenes/camp_electrical_calculator.tscn" id="8_kek6x"]
+[ext_resource type="PackedScene" uid="uid://li1usm2eankn" path="res://scenes/settings.tscn" id="10_ecg7r"]
+[ext_resource type="AudioStream" uid="uid://4anfyk12y8hc" path="res://assets/-bong_001.ogg" id="10_wluvd"]
+[ext_resource type="PackedScene" uid="uid://bsr815inei87h" path="res://camp_cad/camp_cad_v2.tscn" id="11_yxqvj"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hyql3"]
+modulate_color = Color(0.0049992, 0.470172, 0.400768, 1)
+
+[sub_resource type="Animation" id="Animation_xgdj1"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer/HBoxContainer/Selector Bar:custom_minimum_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(211.73, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_28ott"]
+resource_name = "collapse"
+length = 0.1
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer/HBoxContainer/Selector Bar:custom_minimum_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(211.73, 0), Vector2(33.925, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.01),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_oojqb"]
+resource_name = "expand"
+length = 0.1
+step = 0.01
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MarginContainer/HBoxContainer/Selector Bar:custom_minimum_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(33.925, 0), Vector2(211.73, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_m4efh"]
+_data = {
+&"RESET": SubResource("Animation_xgdj1"),
+&"collapse": SubResource("Animation_28ott"),
+&"expand": SubResource("Animation_oojqb")
+}
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wjr1m")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_k7nbf")
+theme_override_styles/panel = SubResource("StyleBoxTexture_hyql3")
+script = ExtResource("2_tqy51")
+
+[node name="BG" type="ColorRect" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.229112, 0.229112, 0.229112, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.013
+anchor_top = 0.02
+anchor_right = 0.987
+anchor_bottom = 0.98
+offset_left = -2.0
+offset_right = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Selector Bar" type="Control" parent="MarginContainer/HBoxContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(211.73, 0)
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/Selector Bar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_k7nbf")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/Selector Bar/Panel"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.01
+anchor_right = 0.5
+anchor_bottom = 0.99
+offset_left = -80.5
+offset_right = 80.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LeftColumn" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="CalculatorBox" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="Calculators Label" type="Label" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/CalculatorBox"]
+layout_mode = 2
+theme = ExtResource("1_v7y7w")
+text = "Calculators
+"
+
+[node name="Calculators Menu" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/CalculatorBox"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="OhmLawCalcButton" type="Button" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/CalculatorBox/Calculators Menu"]
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+theme = ExtResource("1_v7y7w")
+text = "  Ohm Law "
+alignment = 0
+
+[node name="PythagoreButton" type="Button" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/CalculatorBox/Calculators Menu"]
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+theme = ExtResource("1_v7y7w")
+text = "  Pythagore"
+alignment = 0
+
+[node name="Grid_1" type="Button" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/CalculatorBox/Calculators Menu"]
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+theme = ExtResource("1_v7y7w")
+text = "  Grid 1"
+alignment = 0
+
+[node name="Camp Electrical Load" type="Button" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/CalculatorBox/Calculators Menu"]
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+theme = ExtResource("1_v7y7w")
+text = "  Camp Load"
+alignment = 0
+
+[node name="Camp Cad V2" type="Button" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/CalculatorBox/Calculators Menu"]
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+theme = ExtResource("1_v7y7w")
+text = "  Camp Cad V2"
+alignment = 0
+
+[node name="SettingsBox" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
+theme_override_constants/separation = 0
+alignment = 2
+
+[node name="Settings Label" type="Button" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/SettingsBox"]
+layout_mode = 2
+theme = ExtResource("1_v7y7w")
+text = "  Settings
+"
+alignment = 0
+
+[node name="QuitButton" type="Button" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/SettingsBox"]
+layout_mode = 2
+theme = ExtResource("1_v7y7w")
+text = "  Quit"
+alignment = 0
+
+[node name="Calculator Window" type="Control" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/Calculator Window"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -0.399994
+offset_top = -0.6
+offset_right = -0.400024
+offset_bottom = -0.599976
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_k7nbf")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/Calculator Window/Panel"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.005
+anchor_top = 0.005
+anchor_right = 0.995
+anchor_bottom = 0.995
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="OhmLawCalc" parent="MarginContainer/HBoxContainer/Calculator Window/Panel/MarginContainer" instance=ExtResource("6_icv3g")]
+visible = false
+layout_mode = 2
+
+[node name="Pythagore" parent="MarginContainer/HBoxContainer/Calculator Window/Panel/MarginContainer" instance=ExtResource("6_c1e7a")]
+visible = false
+layout_mode = 2
+
+[node name="Test_1" parent="MarginContainer/HBoxContainer/Calculator Window/Panel/MarginContainer" instance=ExtResource("7_diktt")]
+visible = false
+position = Vector2(762.214, 520.352)
+
+[node name="Camp Electrical calculator" parent="MarginContainer/HBoxContainer/Calculator Window/Panel/MarginContainer" instance=ExtResource("8_kek6x")]
+visible = false
+layout_mode = 2
+
+[node name="Settings" parent="MarginContainer/HBoxContainer/Calculator Window/Panel/MarginContainer" instance=ExtResource("10_ecg7r")]
+visible = false
+layout_mode = 2
+
+[node name="Camp Cad2" parent="MarginContainer/HBoxContainer/Calculator Window/Panel/MarginContainer" instance=ExtResource("11_yxqvj")]
+layout_mode = 2
+
+[node name="menus_animation" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_m4efh")
+}
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_wluvd")
+volume_db = -24.434
+
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/CalculatorBox/Calculators Menu/OhmLawCalcButton" to="." method="_on_ohm_law_calc_button_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/CalculatorBox/Calculators Menu/PythagoreButton" to="." method="_on_pythagore_button_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/CalculatorBox/Calculators Menu/Grid_1" to="." method="_on_grid_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/CalculatorBox/Calculators Menu/Camp Electrical Load" to="." method="_on_camp_electrical_load_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/CalculatorBox/Calculators Menu/Camp Cad V2" to="." method="_on_camp_cad_v_2_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/SettingsBox/Settings Label" to="." method="_on_settings_label_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/SettingsBox/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="bg_color" from="MarginContainer/HBoxContainer/Calculator Window/Panel/MarginContainer/Settings/Options_OptionsWindow/MarginContainer/BG Color" to="Panel" method="_on_bg_color_bg_color"]
+
+[editable path="MarginContainer/HBoxContainer/Calculator Window/Panel/MarginContainer/Settings"]

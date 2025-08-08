@@ -1,0 +1,201 @@
+[gd_scene load_steps=4 format=3 uid="uid://lcfhea8gmun7"]
+
+[ext_resource type="Theme" uid="uid://8xl1vqs4t5v1" path="res://themes/panel.tres" id="1_3x05j"]
+[ext_resource type="Theme" uid="uid://bu42yi3aglkrt" path="res://themes/ButtonsTheme.tres" id="2_nnksm"]
+[ext_resource type="Theme" uid="uid://iarl68iasewd" path="res://themes/Tents.tres" id="6_2fw8r"]
+
+[node name="Camp Cad" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="object_instantiator" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_3x05j")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.15
+theme = ExtResource("1_3x05j")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/VBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Top Tabs Panel" type="Panel" parent="Panel/VBoxContainer/Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
+theme = ExtResource("1_3x05j")
+
+[node name="Top Tabs" type="HBoxContainer" parent="Panel/VBoxContainer/Panel/VBoxContainer/Top Tabs Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.01
+anchor_right = 0.99
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 60
+
+[node name="New Object" type="Button" parent="Panel/VBoxContainer/Panel/VBoxContainer/Top Tabs Panel/Top Tabs"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme = ExtResource("2_nnksm")
+text = "New Object"
+
+[node name="Edit" type="Button" parent="Panel/VBoxContainer/Panel/VBoxContainer/Top Tabs Panel/Top Tabs"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme = ExtResource("2_nnksm")
+text = "Edit"
+
+[node name="Tabs Content Panel" type="Panel" parent="Panel/VBoxContainer/Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.8
+theme = ExtResource("1_3x05j")
+
+[node name="New Object Tab" type="HBoxContainer" parent="Panel/VBoxContainer/Panel/VBoxContainer/Tabs Content Panel"]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.01
+anchor_right = 0.99
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="New Tent Container" type="VBoxContainer" parent="Panel/VBoxContainer/Panel/VBoxContainer/Tabs Content Panel/New Object Tab"]
+custom_minimum_size = Vector2(130, 0)
+layout_mode = 2
+alignment = 1
+
+[node name="Mod Tent Button" type="Button" parent="Panel/VBoxContainer/Panel/VBoxContainer/Tabs Content Panel/New Object Tab/New Tent Container"]
+layout_mode = 2
+theme = ExtResource("2_nnksm")
+text = "Mod Tent"
+alignment = 0
+
+[node name="HQSS Button" type="Button" parent="Panel/VBoxContainer/Panel/VBoxContainer/Tabs Content Panel/New Object Tab/New Tent Container"]
+layout_mode = 2
+theme = ExtResource("2_nnksm")
+text = "HQSS"
+alignment = 0
+
+[node name="Num Section Label" type="Label" parent="Panel/VBoxContainer/Panel/VBoxContainer/Tabs Content Panel/New Object Tab/New Tent Container"]
+layout_mode = 2
+text = "Section(s) :"
+
+[node name="Num Section Slider" type="HSlider" parent="Panel/VBoxContainer/Panel/VBoxContainer/Tabs Content Panel/New Object Tab/New Tent Container"]
+layout_mode = 2
+min_value = 1.0
+max_value = 4.0
+value = 1.0
+rounded = true
+
+[node name="Edit Tab" type="HBoxContainer" parent="Panel/VBoxContainer/Panel/VBoxContainer/Tabs Content Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Delete Objects Button" type="Button" parent="Panel/VBoxContainer/Panel/VBoxContainer/Tabs Content Panel/Edit Tab"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme = ExtResource("2_nnksm")
+text = "Delete
+Object(s)"
+
+[node name="Move Objects Button" type="Button" parent="Panel/VBoxContainer/Panel/VBoxContainer/Tabs Content Panel/Edit Tab"]
+custom_minimum_size = Vector2(120, 0)
+layout_mode = 2
+theme = ExtResource("2_nnksm")
+text = "Move
+Object(s)"
+
+[node name="Canvas" type="Panel" parent="Panel/VBoxContainer"]
+show_behind_parent = true
+clip_contents = true
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.85
+theme = ExtResource("1_3x05j")
+
+[node name="Origin" type="Control" parent="Panel/VBoxContainer/Canvas"]
+layout_mode = 1
+anchors_preset = 0
+offset_right = 4.0
+offset_bottom = 4.0
+
+[node name="ColorRect" type="ColorRect" parent="Panel/VBoxContainer/Canvas/Origin"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Selector" type="ColorRect" parent="Panel/VBoxContainer/Canvas"]
+layout_mode = 0
+offset_left = 65.0
+offset_top = -524.0
+offset_right = 105.0
+offset_bottom = -484.0
+
+[node name="utils" type="Control" parent="Panel/VBoxContainer/Canvas"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="justfortenttheme" type="Button" parent="."]
+visible = false
+custom_minimum_size = Vector2(111.735, 90.435)
+layout_mode = 0
+offset_left = 624.0
+offset_top = 319.0
+offset_right = 735.735
+offset_bottom = 409.435
+theme = ExtResource("6_2fw8r")
+text = "HQSS
+Sec: 3
+Power"
+
+[connection signal="pressed" from="Panel/VBoxContainer/Panel/VBoxContainer/Top Tabs Panel/Top Tabs/New Object" to="Panel/VBoxContainer/Panel/VBoxContainer/Tabs Content Panel" method="_on_new_object_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/Panel/VBoxContainer/Top Tabs Panel/Top Tabs/Edit" to="Panel/VBoxContainer/Panel/VBoxContainer/Tabs Content Panel" method="_on_edit_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/Panel/VBoxContainer/Tabs Content Panel/New Object Tab/New Tent Container/Mod Tent Button" to="." method="_on_mod_tent_button_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/Panel/VBoxContainer/Tabs Content Panel/New Object Tab/New Tent Container/HQSS Button" to="." method="_on_hqss_button_pressed"]
+[connection signal="value_changed" from="Panel/VBoxContainer/Panel/VBoxContainer/Tabs Content Panel/New Object Tab/New Tent Container/Num Section Slider" to="Panel/VBoxContainer/Panel/VBoxContainer/Tabs Content Panel" method="_on_num_section_slider_value_changed"]
+[connection signal="pressed" from="Panel/VBoxContainer/Panel/VBoxContainer/Tabs Content Panel/Edit Tab/Delete Objects Button" to="." method="_on_delete_objects_button_pressed"]

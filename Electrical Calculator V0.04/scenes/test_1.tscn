@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://cno8vc7cinrsi"]
+
+[ext_resource type="Script" uid="uid://xewvl05e75wm" path="res://scripts/test_1.gd" id="1_ih7cv"]
+
+[node name="Test_1" type="Node2D"]
+script = ExtResource("1_ih7cv")
+
+[node name="Origin_point" type="Line2D" parent="."]
+points = PackedVector2Array(2, 2, -2, 2, -2, -2, 2, -2)
+closed = true
+width = 6.0

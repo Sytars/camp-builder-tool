@@ -1,0 +1,619 @@
+[gd_scene load_steps=13 format=3 uid="uid://b6qvpbt6d2ewd"]
+
+[ext_resource type="Theme" uid="uid://bu42yi3aglkrt" path="res://themes/ButtonsTheme.tres" id="2_64cpe"]
+[ext_resource type="Theme" uid="uid://ddtvrpt7sq64w" path="res://themes/LabelTheme.tres" id="2_xk5n3"]
+[ext_resource type="Script" uid="uid://bryx3x2mxqf5t" path="res://scripts/layout_axis.gd" id="5_f4oxh"]
+[ext_resource type="Theme" uid="uid://e8giahels7t2" path="res://themes/LineEditTheme.tres" id="5_yvwgc"]
+[ext_resource type="Theme" uid="uid://iarl68iasewd" path="res://themes/Tents.tres" id="6_lrp73"]
+
+[sub_resource type="GDScript" id="GDScript_gll8k"]
+script/source = "extends Control
+
+# Nodes
+@onready var panel = $Panel
+@onready var ribbon = $Panel/Ribbon
+@onready var arrow = $Panel/Ribbon/Collapse_Ribbon/Arrow
+@onready var snap_edit = $\"Panel/Ribbon/Snapping accuracy/HBoxContainer/snap_edit\"
+@onready var snap_label = $\"Panel/Ribbon/Snapping accuracy/snap_label\"
+@onready var snap_slider = $\"Panel/Ribbon/Snapping accuracy/HBoxContainer/snap_slider\"
+@onready var collapse_animations = $collapse_animations
+@onready var selection_timer = $selection_timer
+@onready var new_tent_button = $\"Panel/Ribbon/New Tent/new_tent_button\"
+@onready var tent_selection_ribbon = $\"Panel/Ribbon/New Tent/Tent Selection Ribbon\"
+@onready var tents = $Tents
+@onready var num_sections_label = $\"Panel/Ribbon/New Tent/Tent Selection Ribbon/num_sections_label\"
+@onready var num_sections_slider = $\"Panel/Ribbon/New Tent/Tent Selection Ribbon/num_sections_slider\"
+@onready var tents_data = null
+@onready var selector = $Selector
+var dragging := false
+var init_pos
+var last_selection
+var tents_in_selection := []
+
+
+# Config
+@onready var snap_size: float = 64.0
+var collapsed = true
+var selecting_tent_type = false
+
+# Ready
+func _ready():
+	num_sections_slider.value = 4
+	ribbon.visible = false
+	tent_selection_ribbon.visible = false
+	snap_label.text = \"Snap precision: \"
+	print(\"ready snap size: \", snap_size)
+	snap_slider.value = snap_size
+	snap_edit.text = str(snap_size)
+	panel.size.x = 50
+	tents.set_snap_size(snap_size)
+
+
+# Input Handling
+func _input(event):
+	if not visible:
+		return
+
+	if Input.is_action_just_pressed(\"enter\"):
+		snap_edit.release_focus()
+		if snap_edit.text.is_valid_float():
+			snap_size = float(snap_edit.text)
+			snap_slider.value = snap_size
+		if tents_data:
+			print(\"Tents data: \", tents_data)
+
+	if collapsed and event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		var unsnapped_pos = get_click_pos_relative_to_node(event)
+		if unsnapped_pos != null:
+			#print(\"Unsnapped Position: \", unsnapped_pos)
+			var snapped_pos = snap_vector2(unsnapped_pos, snap_size, size)
+			#print(\"Snapped Position (for depositing): \", snapped_pos)
+	
+ 	# Selection input
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			if dragging and not event.pressed:
+				init_pos = null
+				selector.position = -selector.position
+				selector.size = Vector2(0, 0)
+				get_objects_in_selection()
+				print(\"Objects: \", tents_in_selection)
+			dragging = event.pressed
+	elif event is InputEventMouseMotion and dragging:
+		if not init_pos:
+			init_pos = get_local_mouse_position()
+		update_selector()
+		
+
+
+# Utility Functions
+
+func get_objects_in_selection():
+	tents_in_selection = []
+	if not last_selection:
+		return
+	if tents_data:
+		for tent_type in tents_data:
+			for tent in tents_data[tent_type]:
+				var tent_pos = tents_data[tent_type][tent][\"position\"]
+				var tent_size = tents_data[tent_type][tent][\"size\"]
+				print(\"tent pos: \", tent_pos)
+				print(\"tent size: \", tent_size)
+				print(\"selection pos: \", last_selection[\"position\"])
+				print(\"selection size: \", last_selection[\"size\"])
+				tent_pos.x -= tent_size.x * 2
+				tent_pos.y -= tent_size.y / 2
+				if Rect2(last_selection[\"position\"], last_selection[\"size\"]).encloses(Rect2(tent_pos, tent_size)):
+					tents_in_selection.append(tent)
+				if Rect2(tent_pos, tent_size).intersects(Rect2(last_selection[\"position\"], last_selection[\"size\"])):
+					pass#tents_in_selection.append(tent)
+
+
+
+
+func update_selector():
+	var mouse_pos := get_local_mouse_position()
+	# Horizontal
+	if init_pos.x > mouse_pos.x:
+		selector.color = Color(0, 1, 0, 0.1)
+		selector.position.x = mouse_pos.x
+		selector.size.x = init_pos.x - mouse_pos.x
+	else:
+		selector.color = Color(0, 0, 1, 0.1)
+		selector.position.x = init_pos.x
+		selector.size.x = mouse_pos.x - init_pos.x
+	# Vertical
+	if init_pos.y > mouse_pos.y:
+		selector.position.y = mouse_pos.y
+		selector.size.y = init_pos.y - mouse_pos.y
+	else:
+		selector.position.y = init_pos.y
+		selector.size.y = mouse_pos.y - init_pos.y
+	last_selection = {
+		\"position\": selector.position,
+		\"size\": selector.size
+	}
+
+
+func get_click_pos_relative_to_node(event: InputEventMouseButton):
+	var mouse_global = get_global_mouse_position()
+	var node_origin = get_global_transform().origin
+	var relative = mouse_global - node_origin
+	if relative.x < 0 or relative.y < 0 or relative.x > size.x or relative.y > size.y:
+		return null
+	return relative
+
+
+func snap_vector2(pos: Vector2, snap: float, bounds: Vector2) -> Vector2:
+	if snap <= 0:
+		return pos
+
+	var snapped_x = clamp(round(pos.x / snap) * snap, 0.0, bounds.x - fmod(bounds.x, snap))
+	var snapped_y = clamp(round(pos.y / snap) * snap, 0.0, bounds.y - fmod(bounds.y, snap))
+	return Vector2(snapped_x, snapped_y)
+
+
+func reset_new_tent_ribbon():
+	new_tent_button.text = \"New Tent\"
+	new_tent_button.visible = true
+	tent_selection_ribbon.visible = false
+	
+	
+# Collapse Handling
+func switch_collapse():
+	collapsed = !collapsed
+	tents.set_menu_collapsed(collapsed)
+	collapse_animations.play(\"expand\" if not collapsed else \"collapse\")
+
+
+
+func _on_collapse_animations_animation_finished(anim_name):
+	if anim_name == \"expand\":
+		collapsed = false
+	elif anim_name == \"collapse\":
+		collapsed = true
+		reset_new_tent_ribbon()
+	tents.set_menu_collapsed(collapsed)
+
+func _on_panel_mouse_entered():
+	if collapsed:
+		collapse_animations.play(\"expand\")
+
+
+func _on_mouse_entered():
+	if not collapsed:
+		collapse_animations.play(\"collapse\")
+
+
+# Save Load Handling
+func _get_save_data() -> Dictionary:
+	var data_to_save = {}
+	# Saving snap precision
+	data_to_save[\"snap_precision\"] = {
+		\"snap_value\": snap_size
+	}
+	return data_to_save
+
+
+func _apply_load_data(loaded_data: Dictionary):
+	if loaded_data.has(\"snap_precision\"):
+		snap_size = loaded_data[\"snap_precision\"][\"snap_value\"]
+		tents.set_snap_size(snap_size)
+		snap_slider.value = snap_size
+		snap_edit.text = str(snap_size)
+
+
+
+func _on_h_slider_value_changed(value):
+	snap_edit.text = str(value)
+	snap_size = float(value)
+	tents.set_snap_size(snap_size)
+
+
+func _on_snap_edit_focus_entered():
+	selection_timer.start()
+
+
+func _on_selection_timer_timeout():
+	snap_edit.select()
+	selection_timer.stop()
+
+
+func _on_new_tent_button_pressed():
+	if tent_selection_ribbon.visible == false:
+		tent_selection_ribbon.visible = true
+		new_tent_button.text = \"Cancel\"
+	elif tent_selection_ribbon.visible == true:
+		tent_selection_ribbon.visible = false
+		new_tent_button.text = \"New Tent\"
+		tents.cancel_placement()
+
+
+func _on_mod_button_pressed():
+	tents.new_tent(\"mod\", num_sections_slider.value)
+
+
+func _on_hqss_button_pressed():
+	tents.new_tent(\"hqss\", num_sections_slider.value)
+
+
+func _on_num_sections_slider_value_changed(value):
+	num_sections_label.text = \"Sections: \" + str(value)
+
+
+func _on_tents_send_tents_data(data):
+	tents_data = data
+"
+
+[sub_resource type="GDScript" id="GDScript_gb67l"]
+script/source = "class_name Tents
+extends Control
+
+var tents_data = {
+	\"hqss\": {},
+	\"mod\": {}
+}
+signal send_tents_data
+var placing_tent: bool = false
+var current_tent: Control = null
+var current_type: String = \"\"
+var last_type: String = \"\"
+var current_num_sections: int = 4
+var snap_size := 10.0
+var menu_collapsed = false
+
+var hqss = {
+	\"name\": \"HQSS\",
+	\"size\": Vector2(100, 44)
+}
+var mod = {
+	\"name\": \"Mod Tent\",
+	\"size\": Vector2(90, 40)
+}
+
+func set_snap_size(size: float):
+	snap_size = size
+
+func set_menu_collapsed(b: bool):
+	menu_collapsed = b
+	
+func new_tent(type: String, num_section: int= 4):
+	if placing_tent:
+		current_tent.queue_free()
+	
+	var tent = Button.new()
+	tent.theme = load(\"res://themes/Tents.tres\")
+	tent.text = type.capitalize()
+	var tent_size
+	if type == \"hqss\":
+		tent_size = hqss[\"size\"]
+	elif type == \"mod\":
+		tent_size = mod[\"size\"]
+	tent.modulate = Color(1, 1, 1, 0.5)
+	tent_size.y *= num_section
+	tent.size = tent_size
+	tent.disabled = true  # prevent click during placement
+	tent.name = type + \"_\" + str(tents_data[type].size())
+	add_child(tent)
+	current_tent = tent
+	current_type = type
+	last_type = type
+	current_num_sections = num_section
+	placing_tent = true
+	print(\"Placing new \", type)
+
+func _process(_delta):
+	if placing_tent and current_tent:
+		var pos = get_global_mouse_position() ###
+		pos.x = round(pos.x / snap_size) * snap_size
+		pos.y = round(pos.y / snap_size) * snap_size
+		current_tent.global_position = pos
+		
+func _input(event):
+	if placing_tent and event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			confirm()
+	if placing_tent and Input.is_action_just_pressed(\"reset\"):
+		cancel_placement()
+
+func confirm():
+	if not menu_collapsed:
+		return
+	if not current_tent:
+		return
+		
+	# Prevents placement if overlapping with another tent
+	if tents_data:
+		for tent_type in tents_data:
+			for tent in tents_data[tent_type]:
+				var tent_pos = tents_data[tent_type][tent][\"position\"]
+				var tent_size = tents_data[tent_type][tent][\"size\"]
+				if Rect2(tent_pos, tent_size).intersects(Rect2(current_tent.global_position, current_tent[\"size\"])):
+					print(\"Unable to place: %s is in the way\" % tent)
+					return
+			
+	current_tent.modulate = Color(1, 1, 1, 1)
+	var pos = current_tent.global_position
+	var snap = snap_size
+	pos.x = round(pos.x / snap) * snap
+	pos.y = round(pos.y / snap) * snap
+	current_tent.global_position = pos
+
+	tents_data[current_type][current_tent.name] = {
+		\"position\": pos,
+		\"size\": current_tent.size
+	}
+	current_tent.disabled = false
+	current_tent = null
+	current_type = \"\"
+	placing_tent = false
+
+	new_tent(last_type, current_num_sections)
+	emit_signal(\"send_tents_data\", tents_data)
+
+func cancel_placement():
+	if current_tent:
+		current_tent.queue_free()
+	current_tent = null
+	current_type = \"\"
+	placing_tent = false
+
+
+
+func move_tent(tent):
+	if not tent:
+		return
+	var pos = get_global_mouse_position()
+	pos.x = round(pos.x / snap_size) * snap_size
+	pos.y = round(pos.y / snap_size) * snap_size
+	tent[\"position\"] = pos
+"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g4lpw"]
+bg_color = Color(0.6, 0.6, 0.6, 0.0470588)
+
+[sub_resource type="Animation" id="Animation_v0to0"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel:size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(300, 1080)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel/Ribbon:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_hlamf"]
+resource_name = "collapse"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel:size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(300, 1080), Vector2(50, 1080)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel/Ribbon:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="Animation" id="Animation_3viq0"]
+resource_name = "expand"
+length = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Panel:size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(50, 1080), Vector2(300, 1080)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Panel/Ribbon:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_84861"]
+_data = {
+&"RESET": SubResource("Animation_v0to0"),
+&"collapse": SubResource("Animation_hlamf"),
+&"expand": SubResource("Animation_3viq0")
+}
+
+[node name="Camp_Layout" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_gll8k")
+
+[node name="axis" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("5_f4oxh")
+
+[node name="Tents" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_gb67l")
+
+[node name="justfortenttheme" type="Button" parent="."]
+visible = false
+custom_minimum_size = Vector2(111.735, 90.435)
+layout_mode = 0
+offset_left = 624.0
+offset_top = 319.0
+offset_right = 735.735
+offset_bottom = 409.435
+theme = ExtResource("6_lrp73")
+text = "HQSS
+Sec: 3
+Power"
+
+[node name="Selector" type="ColorRect" parent="."]
+layout_mode = 0
+offset_left = -187.0
+offset_top = -192.0
+offset_right = -147.0
+offset_bottom = -152.0
+color = Color(0, 1, 0, 0.109804)
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 300.0
+offset_bottom = 1080.0
+grow_vertical = 2
+theme = ExtResource("2_xk5n3")
+theme_override_styles/panel = SubResource("StyleBoxFlat_g4lpw")
+
+[node name="Ribbon" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="Snapping accuracy" type="VBoxContainer" parent="Panel/Ribbon"]
+layout_mode = 2
+
+[node name="snap_label" type="Label" parent="Panel/Ribbon/Snapping accuracy"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/Ribbon/Snapping accuracy"]
+layout_mode = 2
+
+[node name="snap_slider" type="HSlider" parent="Panel/Ribbon/Snapping accuracy/HBoxContainer"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="snap_edit" type="LineEdit" parent="Panel/Ribbon/Snapping accuracy/HBoxContainer"]
+layout_mode = 2
+theme = ExtResource("5_yvwgc")
+text = "test"
+
+[node name="New Tent" type="VBoxContainer" parent="Panel/Ribbon"]
+layout_mode = 2
+
+[node name="new_tent_button" type="Button" parent="Panel/Ribbon/New Tent"]
+layout_mode = 2
+theme = ExtResource("2_64cpe")
+theme_override_font_sizes/font_size = 30
+text = "New Tent"
+alignment = 0
+
+[node name="Tent Selection Ribbon" type="VBoxContainer" parent="Panel/Ribbon/New Tent"]
+layout_mode = 2
+
+[node name="num_sections_label" type="Label" parent="Panel/Ribbon/New Tent/Tent Selection Ribbon"]
+layout_mode = 2
+theme = ExtResource("2_xk5n3")
+text = "Sections: 4"
+
+[node name="num_sections_slider" type="HSlider" parent="Panel/Ribbon/New Tent/Tent Selection Ribbon"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+min_value = 1.0
+max_value = 4.0
+value = 1.0
+
+[node name="Mod_button" type="Button" parent="Panel/Ribbon/New Tent/Tent Selection Ribbon"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_64cpe")
+text = "Mod Tent"
+alignment = 0
+
+[node name="Hqss_button" type="Button" parent="Panel/Ribbon/New Tent/Tent Selection Ribbon"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_64cpe")
+text = "HQSS"
+alignment = 0
+
+[node name="Axis_button" type="Button" parent="Panel/Ribbon"]
+layout_mode = 2
+theme = ExtResource("2_64cpe")
+theme_override_font_sizes/font_size = 30
+text = "Show Axis (x)"
+alignment = 0
+
+[node name="collapse_animations" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_84861")
+}
+
+[node name="selection_timer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="send_tents_data" from="Tents" to="." method="_on_tents_send_tents_data"]
+[connection signal="mouse_entered" from="Panel" to="." method="_on_panel_mouse_entered"]
+[connection signal="value_changed" from="Panel/Ribbon/Snapping accuracy/HBoxContainer/snap_slider" to="." method="_on_h_slider_value_changed"]
+[connection signal="focus_entered" from="Panel/Ribbon/Snapping accuracy/HBoxContainer/snap_edit" to="." method="_on_snap_edit_focus_entered"]
+[connection signal="pressed" from="Panel/Ribbon/New Tent/new_tent_button" to="." method="_on_new_tent_button_pressed"]
+[connection signal="value_changed" from="Panel/Ribbon/New Tent/Tent Selection Ribbon/num_sections_slider" to="." method="_on_num_sections_slider_value_changed"]
+[connection signal="pressed" from="Panel/Ribbon/New Tent/Tent Selection Ribbon/Mod_button" to="." method="_on_mod_button_pressed"]
+[connection signal="pressed" from="Panel/Ribbon/New Tent/Tent Selection Ribbon/Hqss_button" to="." method="_on_hqss_button_pressed"]
+[connection signal="pressed" from="Panel/Ribbon/Axis_button" to="axis" method="_on_axis_button_pressed"]
+[connection signal="animation_finished" from="collapse_animations" to="." method="_on_collapse_animations_animation_finished"]
+[connection signal="timeout" from="selection_timer" to="." method="_on_selection_timer_timeout"]

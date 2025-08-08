@@ -1,0 +1,61 @@
+add detection boxes for minimum distances between distances
+
+
+
+after adding ecus
+snappong points for vent hoses for ecus
+Min distances structure with mock numbers
+const MIN_DISTANCES = {
+	"tent": {
+		"tent": 3.0,
+		"generator": 5.0,
+		"storage": 4.0,
+	},
+	"generator": {
+		"tent": 5.0,
+		"generator": 6.0,
+		"storage": 3.0,
+	},
+	"storage": {
+		"tent": 4.0,
+		"generator": 3.0,
+		"storage": 2.0,
+	},
+}
+
+example on how to proceed
+
+func get_required_separation(type_a: String, type_b: String) -> float:
+	if type_a in MIN_DISTANCES and type_b in MIN_DISTANCES[type_a]:
+		return MIN_DISTANCES[type_a][type_b]
+	elif type_b in MIN_DISTANCES and type_a in MIN_DISTANCES[type_b]:
+		return MIN_DISTANCES[type_b][type_a]
+	else:
+		return 0.0  # No rule? Allow overlap or default spacing
+
+func get_snap_position(proposed_pos: Vector2, new_obj: Node2D) -> Vector2:
+	var closest_obj := null
+	var snap_pos := proposed_pos
+	var min_snap_dist := INF
+
+	for other_obj in get_tree().get_nodes_in_group("placeables"):
+		if other_obj == new_obj:
+			continue
+		
+		var dist := proposed_pos.distance_to(other_obj.global_position)
+		var required_dist := get_required_separation(new_obj.type_tag, other_obj.type_tag)
+
+		if dist < required_dist:
+			# Too close, calculate direction and snap to exact separation
+			var dir := (proposed_pos - other_obj.global_position).normalized()
+			var corrected := other_obj.global_position + dir * required_dist
+
+			if corrected.distance_to(proposed_pos) < min_snap_dist:
+				snap_pos = corrected
+				min_snap_dist = corrected.distance_to(proposed_pos)
+
+	if min_snap_dist == INF:
+		# No smart snap needed, fallback to grid snap
+		snap_pos = round_to_grid(proposed_pos)
+
+	return snap_pos

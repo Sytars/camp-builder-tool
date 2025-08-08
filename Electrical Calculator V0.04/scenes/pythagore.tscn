@@ -1,0 +1,133 @@
+[gd_scene load_steps=6 format=3 uid="uid://cmx3b4dghyhi3"]
+
+[ext_resource type="Script" uid="uid://lmab4lnpfh54" path="res://scripts/pythagore.gd" id="1_34gkv"]
+[ext_resource type="Theme" uid="uid://bhj87m4pqud6n" path="res://themes/hboxTheme.tres" id="1_fvgox"]
+[ext_resource type="Theme" uid="uid://ddtvrpt7sq64w" path="res://themes/LabelTheme.tres" id="2_k22r5"]
+[ext_resource type="Theme" uid="uid://e8giahels7t2" path="res://themes/LineEditTheme.tres" id="3_unq8w"]
+[ext_resource type="Theme" uid="uid://bu42yi3aglkrt" path="res://themes/ButtonsTheme.tres" id="4_01ybv"]
+
+[node name="Pythagore" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_34gkv")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 39
+text = "Pythagore Calculator"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="InputBoxes" type="VBoxContainer" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="A" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/InputBoxes"]
+layout_mode = 2
+theme = ExtResource("1_fvgox")
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/InputBoxes/A"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+theme = ExtResource("2_k22r5")
+theme_override_font_sizes/font_size = 20
+text = "Side A"
+horizontal_alignment = 2
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/InputBoxes/A"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_unq8w")
+
+[node name="B" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/InputBoxes"]
+layout_mode = 2
+theme = ExtResource("1_fvgox")
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/InputBoxes/B"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+theme = ExtResource("2_k22r5")
+theme_override_font_sizes/font_size = 20
+text = "Side B"
+horizontal_alignment = 2
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/InputBoxes/B"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_unq8w")
+
+[node name="C" type="HBoxContainer" parent="HBoxContainer/VBoxContainer/InputBoxes"]
+layout_mode = 2
+theme = ExtResource("1_fvgox")
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/InputBoxes/C"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+theme = ExtResource("2_k22r5")
+theme_override_font_sizes/font_size = 20
+text = "Side C"
+horizontal_alignment = 2
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer/InputBoxes/C"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("3_unq8w")
+
+[node name="CalculateMissingButton" type="Button" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("4_01ybv")
+theme_override_font_sizes/font_size = 30
+text = "Find Missing Side"
+
+[node name="MarginContainer" type="Control" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="HBoxContainer/MarginContainer"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.3
+anchor_top = 0.4
+anchor_right = 0.7
+anchor_bottom = 0.6
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AnswerLabel" type="Label" parent="HBoxContainer/MarginContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 1
+theme = ExtResource("2_k22r5")
+theme_override_font_sizes/font_size = 30
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="HBoxContainer"]
+layout_mode = 2
+
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/CalculateMissingButton" to="." method="_on_calculate_missing_button_pressed"]
