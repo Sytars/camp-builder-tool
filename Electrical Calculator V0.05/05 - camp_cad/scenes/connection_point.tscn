@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://d2jep5foxhlnx"]
+
+[ext_resource type="Texture2D" uid="uid://b1nea2aj32h7" path="res://04 - assets/dot.png" id="1_8sfol"]
+[ext_resource type="Script" uid="uid://phoycjfb5x41" path="res://05 - camp_cad/scripts/connection_point.gd" id="1_tkjak"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_awkw0"]
+
+[node name="connection_point" type="Node2D"]
+script = ExtResource("1_tkjak")
+
+[node name="ConnectorArea2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ConnectorArea2D"]
+scale = Vector2(0.65, 0.65)
+shape = SubResource("CircleShape2D_awkw0")
+
+[node name="Dot" type="Sprite2D" parent="ConnectorArea2D"]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_8sfol")
+
+[connection signal="input_event" from="ConnectorArea2D" to="." method="_on_connector_area_2d_input_event"]

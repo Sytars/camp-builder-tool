@@ -1,0 +1,117 @@
+# objects.gd
+extends Control
+
+@onready var debug_labels: Control = $debug
+@onready var x_label: Label = $debug/x_Label
+@onready var y_label: Label = $debug/y_Label
+@onready var pos_label: Label = $debug/pos_Label
+@export var debug := true
+
+var name_label
+var power_label
+var sections_label
+var labels: Array
+var pos_m: Vector2
+var size_m: Vector2
+var object_name: String
+var power: float
+var sections: int
+var last_object_size: Vector2
+var expand_size := Vector2(200, 200)
+var expanded := false
+var last_global_pos
+var last_local_pos
+
+func _ready() -> void:
+	name_label = $"VBoxContainer/Name Label"
+	power_label = $"VBoxContainer/Power Label"
+	sections_label = $"VBoxContainer/Sections Label"
+	labels = [name_label, power_label, sections_label]
+	reset_labels()
+
+
+func _process(_delta: float) -> void:
+	if debug:
+		size_m = Scales.to_m(size)
+		pos_m = Scales.to_m(position)
+		x_label.text = Global.format_number(size_m.x)
+		y_label.text = Global.format_number(size_m.y)
+		pos_label.text = "(" + Global.format_number(pos_m.x) + ", " + Global.format_number(pos_m.y) + ")"
+
+
+func toggle_label(label: String) -> void:
+	match label:
+		"name":
+			name_label.visible = not name_label.visible
+		"power":
+			power_label.visible = not power_label.visible
+		"sections":
+			sections_label.visible = not sections_label.visible
+
+
+func set_object_name(new_name: String) -> void:
+	object_name = new_name
+	update_labels()
+
+
+func set_object_power(new_power: float) -> void:
+	power = new_power
+	update_labels()
+
+
+func set_num_sections(new_num_sections: int) -> void:
+	# Clamping num sections to always be 1, 2, 3, 4
+	if new_num_sections > 4:
+		new_num_sections = 4
+	elif new_num_sections <= 0:
+		new_num_sections = 1
+	sections = new_num_sections
+	update_labels()
+
+
+func update_labels() -> void:
+	for label in labels:
+		if label == name_label:
+			label.text = object_name
+		elif label == power_label:
+			label.text = "Power drawn: " + str(power) + "w"
+		elif label == sections_label:
+			if sections > 1:
+				label.text = str(sections) + " sections"
+			else:
+				label.text = str(sections) + " section"
+
+
+func toggle_expand() -> void:
+	if expanded:
+		collapse()
+	else:
+		expand()
+	expanded = not expanded
+
+
+func expand() -> void:
+	last_global_pos = global_position
+	last_local_pos = position
+	update_labels()
+	last_object_size = size
+	size = expand_size
+	top_level = true
+	position = last_global_pos
+
+
+func collapse() -> void:
+	reset_labels()
+	size = last_object_size
+	top_level = false
+	position = last_local_pos
+
+
+func reset_labels() -> void:
+	for label in labels:
+		label.text = ""
+
+
+func _on_button_pressed() -> void:
+	print(self)
+	toggle_expand()
