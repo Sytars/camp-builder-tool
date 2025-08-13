@@ -1,0 +1,36 @@
+_____________________________ Objects _____________________________
+-make object move independently or by selection group on the canvas
+-potentially rethink the snapping system, instead of a fixed grid snap, object snap onto each other,
+based on minimum distances from OBJECT_TEMPLATE
+-make all objects rotatable
+-add:
+	exterior lighting units
+	fire points
+	antennas
+- allow object editing:
+	change object name
+	change object power rating
+	
+
+
+_____________________________ Cables _____________________________
+-rework the cable system, only activate after a button has been pressed
+-rework the snapping point system:
+	invisible unless mouse if hovering the object, and cable placement is active
+	when mouse hovers object, show all connection points at once, on a small scale
+	when a single connection point is hovered, make it 4x bigger, and modulate it lighter
+-link cables so generators are parents to distribution boxes, which are parent to loads in the data struct
+
+_____________________________ dual version system _____________________________
+Develop a dual system, one for fast object placement, and list retrieval, the other expands
+that for precise power assignements, object can be drawned inside a tent object, and preset power values
+are set to those items ( printers, laptops, routers, shredders, lighting)
+
+_____________________________ Console _____________________________
+show every action (from now on) in the console, located inside cc_canvas
+
+_____________________________ Bug fixes _____________________________
+Canvas scaling:
+	- make the snapping consistent across all zoom levels
+		currently, the snapping precision changes depending on zoom, which is terrible
+	- make zooming centered about the mouse cursor, not the origin
