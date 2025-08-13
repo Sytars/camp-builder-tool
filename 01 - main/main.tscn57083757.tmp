@@ -1,0 +1,171 @@
+[gd_scene load_steps=9 format=3 uid="uid://jr0utgss3wkj"]
+
+[ext_resource type="Script" uid="uid://b6tw2uhx10t78" path="res://01 - main/main.gd" id="1_4dugh"]
+[ext_resource type="Theme" uid="uid://8xl1vqs4t5v1" path="res://themes/panel.tres" id="2_67ri8"]
+[ext_resource type="Script" uid="uid://c857wljvgmakc" path="res://01 - main/Panel.gd" id="3_grrlh"]
+[ext_resource type="Theme" uid="uid://bu42yi3aglkrt" path="res://themes/ButtonsTheme.tres" id="4_0i4oc"]
+[ext_resource type="PackedScene" uid="uid://brqo40txkrn4i" path="res://ohmlaw/ohm_law_calc.tscn" id="5_bsumw"]
+[ext_resource type="PackedScene" uid="uid://li1usm2eankn" path="res://03 - settings/settings.tscn" id="6_fwcvl"]
+[ext_resource type="PackedScene" uid="uid://bsr815inei87h" path="res://02 - camp_cad/scenes/camp_cad_v2.tscn" id="7_na0o7"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hyql3"]
+modulate_color = Color(0.0049992, 0.470172, 0.400768, 1)
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4dugh")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_67ri8")
+theme_override_styles/panel = SubResource("StyleBoxTexture_hyql3")
+script = ExtResource("3_grrlh")
+
+[node name="BG" type="ColorRect" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.229112, 0.229112, 0.229112, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Selector Bar" type="Control" parent="MarginContainer/HBoxContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(125, 0)
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/Selector Bar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_67ri8")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/Selector Bar/Panel"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 122.0
+grow_vertical = 2
+
+[node name="LeftColumn" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="CalculatorBox" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="Calculators Menu" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/CalculatorBox"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Camp Cad V2" type="Button" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/CalculatorBox/Calculators Menu"]
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+theme = ExtResource("4_0i4oc")
+text = "  CampCAD"
+alignment = 0
+
+[node name="OhmLawCalcButton" type="Button" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/CalculatorBox/Calculators Menu"]
+custom_minimum_size = Vector2(0, 62)
+layout_mode = 2
+theme = ExtResource("4_0i4oc")
+text = "  Ohm's Law "
+alignment = 0
+
+[node name="SettingsBox" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
+theme_override_constants/separation = 0
+alignment = 2
+
+[node name="Settings Label" type="Button" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/SettingsBox"]
+layout_mode = 2
+theme = ExtResource("4_0i4oc")
+text = "  Settings
+"
+alignment = 0
+
+[node name="QuitButton" type="Button" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/SettingsBox"]
+layout_mode = 2
+theme = ExtResource("4_0i4oc")
+text = "  Quit"
+alignment = 0
+
+[node name="Calculator Window" type="Control" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/Calculator Window"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -0.399994
+offset_top = -0.6
+offset_right = -0.400024
+offset_bottom = -0.599976
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_67ri8")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/Calculator Window/Panel"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.005
+anchor_top = 0.005
+anchor_right = 0.995
+anchor_bottom = 0.995
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="OhmLawCalc" parent="MarginContainer/HBoxContainer/Calculator Window/Panel/MarginContainer" instance=ExtResource("5_bsumw")]
+visible = false
+layout_mode = 2
+
+[node name="Settings" parent="MarginContainer/HBoxContainer/Calculator Window/Panel/MarginContainer" instance=ExtResource("6_fwcvl")]
+visible = false
+layout_mode = 2
+
+[node name="Camp Cad2" parent="MarginContainer/HBoxContainer/Calculator Window/Panel/MarginContainer" instance=ExtResource("7_na0o7")]
+layout_mode = 2
+
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/CalculatorBox/Calculators Menu/Camp Cad V2" to="." method="_on_camp_cad_v_2_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/CalculatorBox/Calculators Menu/OhmLawCalcButton" to="." method="_on_ohm_law_calc_button_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/SettingsBox/Settings Label" to="." method="_on_settings_label_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/SettingsBox/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="bg_color" from="MarginContainer/HBoxContainer/Calculator Window/Panel/MarginContainer/Settings/Options_OptionsWindow/MarginContainer/BG Color" to="Panel" method="_on_bg_color_bg_color"]
+
+[editable path="MarginContainer/HBoxContainer/Calculator Window/Panel/MarginContainer/Settings"]

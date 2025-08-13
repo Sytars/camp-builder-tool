@@ -1,0 +1,203 @@
+[gd_scene load_steps=24 format=3 uid="uid://jr0utgss3wkj"]
+
+[ext_resource type="Script" uid="uid://b6tw2uhx10t78" path="res://01 - main/main.gd" id="1_4dugh"]
+[ext_resource type="Theme" uid="uid://8xl1vqs4t5v1" path="res://98 - themes/panel.tres" id="2_67ri8"]
+[ext_resource type="Script" uid="uid://c857wljvgmakc" path="res://01 - main/Panel.gd" id="3_grrlh"]
+[ext_resource type="Texture2D" uid="uid://bwncyb3haon1e" path="res://04 - assets/icons/CAD_normal.PNG" id="4_7ceoq"]
+[ext_resource type="Texture2D" uid="uid://ql7e51mufjwu" path="res://04 - assets/icons/CAD_pressed.PNG" id="5_akwqn"]
+[ext_resource type="PackedScene" uid="uid://brqo40txkrn4i" path="res://06 - ohmlaw/ohm_law_calc.tscn" id="5_bsumw"]
+[ext_resource type="PackedScene" uid="uid://li1usm2eankn" path="res://03 - settings/settings.tscn" id="6_fwcvl"]
+[ext_resource type="Texture2D" uid="uid://nerswp5ydoxp" path="res://04 - assets/icons/CAD_hovered.PNG" id="6_q0vdq"]
+[ext_resource type="Texture2D" uid="uid://dvvp1fx0ud0j1" path="res://04 - assets/icons/CAD_disabled.PNG" id="7_gfa0i"]
+[ext_resource type="PackedScene" uid="uid://bsr815inei87h" path="res://05 - camp_cad/scenes/CampCAD.tscn" id="7_na0o7"]
+[ext_resource type="Texture2D" uid="uid://0gfl835rfptf" path="res://04 - assets/icons/ohm_normal.PNG" id="8_hdhhb"]
+[ext_resource type="Texture2D" uid="uid://dgg7q1ighdpp" path="res://04 - assets/icons/ohm_pressed.PNG" id="9_utjuq"]
+[ext_resource type="Texture2D" uid="uid://dt1j4q0k6nf6a" path="res://04 - assets/icons/ohm_hovered.PNG" id="10_nymxd"]
+[ext_resource type="Texture2D" uid="uid://cpp2bns1a14rg" path="res://04 - assets/icons/ohm_disabled.PNG" id="11_deo1h"]
+[ext_resource type="Texture2D" uid="uid://d4jjjj6yd4xsq" path="res://04 - assets/icons/settings_normal.PNG" id="12_bwhwf"]
+[ext_resource type="Texture2D" uid="uid://cmocryuiqm5gw" path="res://04 - assets/icons/settings_pressed.PNG" id="13_owhs1"]
+[ext_resource type="Texture2D" uid="uid://duyyoy1gbh4hn" path="res://04 - assets/icons/settings_hovered.PNG" id="14_fo87o"]
+[ext_resource type="Texture2D" uid="uid://ddyndri8debiv" path="res://04 - assets/icons/settings_disabled.PNG" id="15_fnlil"]
+[ext_resource type="Texture2D" uid="uid://3ig1ubn4r6u0" path="res://04 - assets/icons/exit_normal.PNG" id="16_ppbnq"]
+[ext_resource type="Texture2D" uid="uid://b3bn717mkkji3" path="res://04 - assets/icons/exit_pressed.PNG" id="17_mvo6o"]
+[ext_resource type="Texture2D" uid="uid://l1vviijwwn7t" path="res://04 - assets/icons/exit_hovered.PNG" id="18_0u32e"]
+[ext_resource type="Texture2D" uid="uid://ccx56pofbqr6m" path="res://04 - assets/icons/exit_disabled.PNG" id="19_0y1oy"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hyql3"]
+modulate_color = Color(0.0049992, 0.470172, 0.400768, 1)
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4dugh")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_67ri8")
+theme_override_styles/panel = SubResource("StyleBoxTexture_hyql3")
+script = ExtResource("3_grrlh")
+
+[node name="BG" type="ColorRect" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.229112, 0.229112, 0.229112, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Selector Bar" type="Control" parent="MarginContainer/HBoxContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/Selector Bar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_67ri8")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/Selector Bar/Panel"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -25.0
+offset_right = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LeftColumn" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="CalculatorBox" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="Calculators Menu" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/CalculatorBox"]
+layout_mode = 2
+theme_override_constants/separation = 7
+
+[node name="CAD button" type="TextureButton" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/CalculatorBox/Calculators Menu"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture_normal = ExtResource("4_7ceoq")
+texture_pressed = ExtResource("5_akwqn")
+texture_hover = ExtResource("6_q0vdq")
+texture_disabled = ExtResource("7_gfa0i")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Ohm Law button" type="TextureButton" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/CalculatorBox/Calculators Menu"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture_normal = ExtResource("8_hdhhb")
+texture_pressed = ExtResource("9_utjuq")
+texture_hover = ExtResource("10_nymxd")
+texture_disabled = ExtResource("11_deo1h")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="SettingsBox" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
+theme_override_constants/separation = 7
+alignment = 2
+
+[node name="Settings button" type="TextureButton" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/SettingsBox"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture_normal = ExtResource("12_bwhwf")
+texture_pressed = ExtResource("13_owhs1")
+texture_hover = ExtResource("14_fo87o")
+texture_disabled = ExtResource("15_fnlil")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Exit button" type="TextureButton" parent="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/SettingsBox"]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+texture_normal = ExtResource("16_ppbnq")
+texture_pressed = ExtResource("17_mvo6o")
+texture_hover = ExtResource("18_0u32e")
+texture_disabled = ExtResource("19_0y1oy")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="Calculator Window" type="Control" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="MarginContainer/HBoxContainer/Calculator Window"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -0.399994
+offset_top = -0.6
+offset_right = -0.400024
+offset_bottom = -0.599976
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_67ri8")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/Calculator Window/Panel"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.005
+anchor_top = 0.005
+anchor_right = 0.995
+anchor_bottom = 0.995
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="OhmLawCalc" parent="MarginContainer/HBoxContainer/Calculator Window/Panel/MarginContainer" instance=ExtResource("5_bsumw")]
+visible = false
+layout_mode = 2
+
+[node name="Settings" parent="MarginContainer/HBoxContainer/Calculator Window/Panel/MarginContainer" instance=ExtResource("6_fwcvl")]
+visible = false
+layout_mode = 2
+
+[node name="Camp Cad2" parent="MarginContainer/HBoxContainer/Calculator Window/Panel/MarginContainer" instance=ExtResource("7_na0o7")]
+layout_mode = 2
+
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/CalculatorBox/Calculators Menu/CAD button" to="." method="_on_cad_button_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/CalculatorBox/Calculators Menu/Ohm Law button" to="." method="_on_ohm_law_button_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/SettingsBox/Settings button" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/Selector Bar/Panel/MarginContainer/LeftColumn/SettingsBox/Exit button" to="." method="_on_exit_button_pressed"]
+[connection signal="bg_color" from="MarginContainer/HBoxContainer/Calculator Window/Panel/MarginContainer/Settings/Options_OptionsWindow/MarginContainer/BG Color" to="Panel" method="_on_bg_color_bg_color"]
+
+[editable path="MarginContainer/HBoxContainer/Calculator Window/Panel/MarginContainer/Settings"]

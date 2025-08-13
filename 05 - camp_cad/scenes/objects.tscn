@@ -1,0 +1,93 @@
+[gd_scene load_steps=3 format=3 uid="uid://0dyrnc2ikr6o"]
+
+[ext_resource type="Script" uid="uid://bpll7jfnpldur" path="res://05 - camp_cad/scripts/o_objects.gd" id="1_oikek"]
+[ext_resource type="Theme" uid="uid://iarl68iasewd" path="res://98 - themes/Tents.tres" id="2_wiffo"]
+
+[node name="Objects" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 2.0
+offset_bottom = 2.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_oikek")
+
+[node name="debug" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="x_Label" type="Label" parent="debug"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = -24.0
+offset_right = 20.0
+offset_bottom = -1.0
+grow_horizontal = 2
+
+[node name="y_Label" type="Label" parent="debug"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -43.0
+offset_top = -16.0
+offset_right = -3.0
+offset_bottom = 7.0
+grow_vertical = 2
+
+[node name="pos_Label" type="Label" parent="debug"]
+custom_minimum_size = Vector2(114.61, 0)
+layout_mode = 1
+offset_left = -115.0
+offset_top = -24.0
+offset_right = -0.389999
+offset_bottom = -1.0
+horizontal_alignment = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.01
+anchor_top = 0.01
+anchor_right = 0.99
+anchor_bottom = 0.99
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Name Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Name"
+
+[node name="Sections Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Sections"
+
+[node name="Power Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Power"
+
+[node name="Button" type="Button" parent="."]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_wiffo")
+
+[node name="connection_points_container" type="Node2D" parent="."]
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
